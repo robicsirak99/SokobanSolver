@@ -1,10 +1,8 @@
 package allapotter;
 
-import allapotter.Allapot;
-
 public class Operator {
 
-    public char op;
+    private char op;
 
     public Operator(char op){
         this.op = op;
@@ -12,112 +10,115 @@ public class Operator {
 
     public Allapot alkalmaz(Allapot allapot) {
 
-        int[][] uj_allapot_tomb = new int[allapot.magassag()][allapot.szelesseg()];
-        int mozgatott_lada_x = -1;
-        int mozgatott_lada_y = -1;
+        int[][] ujAllapotTomb = new int[allapot.tombMagassag()][allapot.tombSzelesseg()];
+        int mozgatottLadaX = -1;
+        int mozgatottLadaY = -1;
 
-        for(int i=0; i<allapot.magassag(); i++){
-            for(int j=0; j<allapot.szelesseg(); j++){
-                uj_allapot_tomb[i][j] = allapot.allapot_tomb[i][j];
-            }
+        for(int i=0; i<allapot.tombMagassag(); i++){
+            if (allapot.tombSzelesseg() >= 0)
+                System.arraycopy(allapot.allapotTomb[i], 0, ujAllapotTomb[i], 0, allapot.tombSzelesseg());
         }
-        int jatekos_x = jatekosKeres(uj_allapot_tomb,'x');
-        int jatekos_y = jatekosKeres(uj_allapot_tomb,'y');
+        int jatekosX = jatekosKeres(ujAllapotTomb,'x');
+        int jatekosY = jatekosKeres(ujAllapotTomb,'y');
 
         //ha a pozíció amiről ellép egy célhely akkor maradjon meg annak
-        if(uj_allapot_tomb[jatekos_x][jatekos_y]==7)
-            uj_allapot_tomb[jatekos_x][jatekos_y] = 3;
-        else uj_allapot_tomb[jatekos_x][jatekos_y] = 0;
+        if(ujAllapotTomb[jatekosX][jatekosY]==7)
+            ujAllapotTomb[jatekosX][jatekosY] = 3;
+        else ujAllapotTomb[jatekosX][jatekosY] = 0;
 
         //ha doboz van a játékos előtt
-        if(jatekosElottEgyel(uj_allapot_tomb,jatekos_x,jatekos_y)==2 || jatekosElottEgyel(uj_allapot_tomb,jatekos_x,jatekos_y)==5){
+        if(jatekosElottEgyel(ujAllapotTomb,jatekosX,jatekosY)==2 || jatekosElottEgyel(ujAllapotTomb,jatekosX,jatekosY)==5){
             //ha a dobozt cél helyre toljuk
-            if(jatekosElottKettovel(uj_allapot_tomb,jatekos_x,jatekos_y)==3)
-                lerakJatekosEleKettovel(uj_allapot_tomb,jatekos_x,jatekos_y,5);
+            if(jatekosElottKettovel(ujAllapotTomb,jatekosX,jatekosY)==3)
+                lerakJatekosEleKettovel(ujAllapotTomb,jatekosX,jatekosY,5);
                 //ha üres helyre toljuk
-            else lerakJatekosEleKettovel(uj_allapot_tomb,jatekos_x,jatekos_y,2);
-            mozgatott_lada_x = ladaPozicio(jatekos_x,jatekos_y)[0];
-            mozgatott_lada_y = ladaPozicio(jatekos_x,jatekos_y)[1];
+            else lerakJatekosEleKettovel(ujAllapotTomb,jatekosX,jatekosY,2);
+            mozgatottLadaX = ladaPozicio(jatekosX,jatekosY)[0];
+            mozgatottLadaY = ladaPozicio(jatekosX,jatekosY)[1];
         }
         //ha cél helyre lép a játkos
-        if((jatekosElottEgyel(uj_allapot_tomb,jatekos_x,jatekos_y)==3) || (jatekosElottEgyel(uj_allapot_tomb,jatekos_x,jatekos_y)==5))
-            lerakJatekosEleEgyel(uj_allapot_tomb,jatekos_x,jatekos_y,7);
-        else lerakJatekosEleEgyel(uj_allapot_tomb,jatekos_x,jatekos_y,4);
+        if((jatekosElottEgyel(ujAllapotTomb,jatekosX,jatekosY)==3) || (jatekosElottEgyel(ujAllapotTomb,jatekosX,jatekosY)==5))
+            lerakJatekosEleEgyel(ujAllapotTomb,jatekosX,jatekosY,7);
+        else lerakJatekosEleEgyel(ujAllapotTomb,jatekosX,jatekosY,4);
 
-        return new Allapot(uj_allapot_tomb, mozgatott_lada_x, mozgatott_lada_y);
+        return new Allapot(ujAllapotTomb, mozgatottLadaX, mozgatottLadaY);
     }
 
     public boolean alkalmazhato(Allapot allapot){
-        int jatekos_x = jatekosKeres(allapot.allapot_tomb,'x');
-        int jatekos_y = jatekosKeres(allapot.allapot_tomb,'y');
+        int jatekosX = jatekosKeres(allapot.allapotTomb,'x');
+        int jatekosY = jatekosKeres(allapot.allapotTomb,'y');
         //ha fal van előtte
-        if (jatekosElottEgyel(allapot.allapot_tomb,jatekos_x,jatekos_y)==1)
+        if (jatekosElottEgyel(allapot.allapotTomb,jatekosX,jatekosY)==1)
             return false;
             //ha doboz + fal van előtte
         else if(
-                ((jatekosElottEgyel(allapot.allapot_tomb,jatekos_x,jatekos_y)==2) && (jatekosElottKettovel(allapot.allapot_tomb,jatekos_x,jatekos_y)==1))
+                ((jatekosElottEgyel(allapot.allapotTomb,jatekosX,jatekosY)==2) && (jatekosElottKettovel(allapot.allapotTomb,jatekosX,jatekosY)==1))
                         //ha doboz + doboz van előtte
-                        || ((jatekosElottEgyel(allapot.allapot_tomb,jatekos_x,jatekos_y)==2) && (jatekosElottKettovel(allapot.allapot_tomb,jatekos_x,jatekos_y)==2))
+                        || ((jatekosElottEgyel(allapot.allapotTomb,jatekosX,jatekosY)==2) && (jatekosElottKettovel(allapot.allapotTomb,jatekosX,jatekosY)==2))
                         //ha doboz a célon + fal van előtte
-                        || ((jatekosElottEgyel(allapot.allapot_tomb,jatekos_x,jatekos_y)==5) && (jatekosElottKettovel(allapot.allapot_tomb,jatekos_x,jatekos_y)==1))
+                        || ((jatekosElottEgyel(allapot.allapotTomb,jatekosX,jatekosY)==5) && (jatekosElottKettovel(allapot.allapotTomb,jatekosX,jatekosY)==1))
                         //ha doboz a célon + doboz a célon van előtte
-                        || ((jatekosElottEgyel(allapot.allapot_tomb,jatekos_x,jatekos_y)==5) && (jatekosElottKettovel(allapot.allapot_tomb,jatekos_x,jatekos_y)==5))
+                        || ((jatekosElottEgyel(allapot.allapotTomb,jatekosX,jatekosY)==5) && (jatekosElottKettovel(allapot.allapotTomb,jatekosX,jatekosY)==5))
                         //ha doboz + doboz a célon van előtte
-                        || ((jatekosElottEgyel(allapot.allapot_tomb,jatekos_x,jatekos_y)==2) && (jatekosElottKettovel(allapot.allapot_tomb,jatekos_x,jatekos_y)==5))
+                        || ((jatekosElottEgyel(allapot.allapotTomb,jatekosX,jatekosY)==2) && (jatekosElottKettovel(allapot.allapotTomb,jatekosX,jatekosY)==5))
                         //ha doboz a célon + doboz van előtte
-                        || ((jatekosElottEgyel(allapot.allapot_tomb,jatekos_x,jatekos_y)==5) && (jatekosElottKettovel(allapot.allapot_tomb,jatekos_x,jatekos_y)==2))
+                        || ((jatekosElottEgyel(allapot.allapotTomb,jatekosX,jatekosY)==5) && (jatekosElottKettovel(allapot.allapotTomb,jatekosX,jatekosY)==2))
         ) return false;
         else return true;
     }
 
-    public int jatekosElottEgyel(int[][] allapot_tomb, int poz_x, int poz_y){
+    public int jatekosElottEgyel(int[][] allapotTomb, int pozX, int pozY){
         switch(this.op){
-            case 'f' : return allapot_tomb[poz_x-1][poz_y];
-            case 'l' : return allapot_tomb[poz_x+1][poz_y];
-            case 'j' : return allapot_tomb[poz_x][poz_y+1];
-            case 'b' : return allapot_tomb[poz_x][poz_y-1];
+            case 'f' : return allapotTomb[pozX-1][pozY];
+            case 'l' : return allapotTomb[pozX+1][pozY];
+            case 'j' : return allapotTomb[pozX][pozY+1];
+            case 'b' : return allapotTomb[pozX][pozY-1];
             default : return -1;
         }
     }
-    public void lerakJatekosEleEgyel(int[][] allapot_tomb, int poz_x, int poz_y, int ertek){
+    public void lerakJatekosEleEgyel(int[][] allapotTomb, int pozX, int pozY, int ertek){
         switch(this.op){
-            case 'f' : {allapot_tomb[poz_x-1][poz_y] = ertek;break;}
-            case 'l' : {allapot_tomb[poz_x+1][poz_y] = ertek;break;}
-            case 'j' : {allapot_tomb[poz_x][poz_y+1] = ertek;break;}
-            case 'b' : {allapot_tomb[poz_x][poz_y-1] = ertek;break;}
+            case 'f' : {allapotTomb[pozX-1][pozY] = ertek;break;}
+            case 'l' : {allapotTomb[pozX+1][pozY] = ertek;break;}
+            case 'j' : {allapotTomb[pozX][pozY+1] = ertek;break;}
+            case 'b' : {allapotTomb[pozX][pozY-1] = ertek;break;}
+            default:
+                throw new IllegalStateException("Unexpected value: " + this.op);
         }
     }
-    public int jatekosElottKettovel(int[][] allapot_tomb, int poz_x, int poz_y){
+    public int jatekosElottKettovel(int[][] allapotTomb, int pozX, int pozY){
         switch(this.op){
-            case 'f' : return allapot_tomb[poz_x-2][poz_y];
-            case 'l' : return allapot_tomb[poz_x+2][poz_y];
-            case 'j' : return allapot_tomb[poz_x][poz_y+2];
-            case 'b' : return allapot_tomb[poz_x][poz_y-2];
+            case 'f' : return allapotTomb[pozX-2][pozY];
+            case 'l' : return allapotTomb[pozX+2][pozY];
+            case 'j' : return allapotTomb[pozX][pozY+2];
+            case 'b' : return allapotTomb[pozX][pozY-2];
             default : return -1;
         }
     }
-    public void lerakJatekosEleKettovel(int[][] allapot_tomb, int poz_x, int poz_y, int ertek){
+    public void lerakJatekosEleKettovel(int[][] allapotTomb, int pozX, int pozY, int ertek){
         switch(this.op){
-            case 'f' : {allapot_tomb[poz_x-2][poz_y] = ertek;break;}
-            case 'l' : {allapot_tomb[poz_x+2][poz_y] = ertek;break;}
-            case 'j' : {allapot_tomb[poz_x][poz_y+2] = ertek;break;}
-            case 'b' : {allapot_tomb[poz_x][poz_y-2] = ertek;break;}
+            case 'f' : {allapotTomb[pozX-2][pozY] = ertek;break;}
+            case 'l' : {allapotTomb[pozX+2][pozY] = ertek;break;}
+            case 'j' : {allapotTomb[pozX][pozY+2] = ertek;break;}
+            case 'b' : {allapotTomb[pozX][pozY-2] = ertek;break;}
+            default:
+                throw new IllegalStateException("Unexpected value: " + this.op);
         }
     }
-    public int[] ladaPozicio(int poz_x, int poz_y){
+    public int[] ladaPozicio(int pozX, int pozY){
         switch(this.op){
-            case 'f' : {return new int[]{poz_x-2,poz_y};}
-            case 'l' : {return new int[]{poz_x+2,poz_y};}
-            case 'j' : {return new int[]{poz_x,poz_y+2};}
-            case 'b' : {return new int[]{poz_x,poz_y-2};}
+            case 'f' : {return new int[]{pozX-2,pozY};}
+            case 'l' : {return new int[]{pozX+2,pozY};}
+            case 'j' : {return new int[]{pozX,pozY+2};}
+            case 'b' : {return new int[]{pozX,pozY-2};}
             default : return new int[]{-1,-1};
         }
     }
 
-    public int jatekosKeres(int[][] allapot_tomb, char xy){
-        for(int i=0; i<allapot_tomb.length; i++){
-            for(int j=0; j<allapot_tomb[0].length; j++){
-                if((allapot_tomb[i][j]==4) || (allapot_tomb[i][j]==7)) {
+    public int jatekosKeres(int[][] allapotTomb, char xy){
+        for(int i=0; i<allapotTomb.length; i++){
+            for(int j=0; j<allapotTomb[0].length; j++){
+                if((allapotTomb[i][j]==4) || (allapotTomb[i][j]==7)) {
                     if(xy=='x') return i;
                     else if (xy=='y') return j;
                 }

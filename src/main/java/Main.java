@@ -1,51 +1,28 @@
 import allapotter.Allapot;
 import allapotter.Operator;
-import allapotter.PalyaBeolvaso;
+import palya.Palya;
+import palya.PalyaBetolto;
 import montecarlo.MonteCarloFaKereso;
-import montecarlo.UCB1;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main{
 
-    public static List<Operator> OPERATOROK = new ArrayList<Operator>();
+    private static final int SZINT = 1;
+    private static List<Operator> operatorok = new ArrayList<>(){};
+    private static PalyaBetolto palyaBetolto = new PalyaBetolto();
 
     public static void main(String[] args) {
+        Palya palya = palyaBetolto.palyatBetolt(SZINT);
+        palya.setAllapot(new Allapot(palya.getPalyaTomb()));
 
-        PalyaBeolvaso palyaBeolvaso = new PalyaBeolvaso();
-        int szint = 1;
-        String[] jelenlegi_palya = palyaBeolvaso.beolvasKovetkezoSzint(szint);
-        int palya_szelesseg = palyaBeolvaso.palya_szelesseg;
-        int palya_magassag = palyaBeolvaso.palya_magassag;
+        operatorok.add(new Operator('f'));
+        operatorok.add(new Operator('l'));
+        operatorok.add(new Operator('j'));
+        operatorok.add(new Operator('b'));
 
-        Allapot kezdoAllapot = kezdoAllapotKeszit(jelenlegi_palya, palya_magassag, palya_szelesseg);
-
-        kezdoAllapot.allapotKirajzol();
-
-        OPERATOROK.add(new Operator('f'));
-        OPERATOROK.add(new Operator('l'));
-        OPERATOROK.add(new Operator('j'));
-        OPERATOROK.add(new Operator('b'));
-
-        MonteCarloFaKereso monteCarloFaKereso = new MonteCarloFaKereso(kezdoAllapot,OPERATOROK);
-        monteCarloFaKereso.elindit();
-    }
-
-
-    public static Allapot kezdoAllapotKeszit(String[] jelenlegi_palya,int magassag, int szelesseg){
-        int[][] allapot_tomb = new int[magassag][szelesseg];
-        for(int i=0; i<jelenlegi_palya.length; i++){
-            for(int j=0; j<jelenlegi_palya[i].length(); j++){
-                switch (jelenlegi_palya[i].charAt(j)) {
-                    case '-' :{ allapot_tomb[i][j]=0; break; }
-                    case '#' :{ allapot_tomb[i][j]=1; break; }
-                    case '$' :{ allapot_tomb[i][j]=2; break; }
-                    case '.' :{ allapot_tomb[i][j]=3; break; }
-                    case '@' :{ allapot_tomb[i][j]=4; break; }
-                }
-            }
-        }
-        return new Allapot(allapot_tomb,-1,-1);
+        MonteCarloFaKereso monteCarloFaKereso = new MonteCarloFaKereso(operatorok);
+        monteCarloFaKereso.algoritmusElindit(palya.getAllapot());
     }
 }
