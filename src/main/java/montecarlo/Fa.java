@@ -1,7 +1,8 @@
 package montecarlo;
 
 public class Fa {
-    Csomopont gyoker;
+
+    private Csomopont gyoker;
 
     public Fa(Csomopont csomopont){
         this.gyoker = csomopont;
@@ -10,5 +11,4 @@ public class Fa {
     public Csomopont getGyoker() {
         return gyoker;
     }
-
 }

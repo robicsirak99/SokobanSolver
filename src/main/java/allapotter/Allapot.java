@@ -2,20 +2,20 @@ package allapotter;
 
 public class Allapot {
 
-    //0 - üres
-    //1 - fal
-    //2 - doboz
-    //3 - cél
-    //5 - doboz a célon
-    //4 - játékos
-    //7 - játékos célon
+    /**
+     * 0 - ures
+     * 1 - fal
+     * 2 - doboz
+     * 3 - cel
+     * 5 - doboz a celon
+     * 4 - jatekos
+     * 7 - jatekos a celon
+     */
 
     private int[][] allapotTomb;
 
     private int utoljaraMozgatottDobozX;
     private int utoljaraMozgatottDobozY;
-
-    private TavolsagSzamito tavolsagSzamito = new TavolsagSzamito();
 
     public Allapot(int[][] allapotTomb){
         this.allapotTomb = allapotTomb;
@@ -35,17 +35,6 @@ public class Allapot {
 
     public int tombSzelesseg() {
         return this.allapotTomb[0].length;
-    }
-
-    public double heurisztika(){
-        int dobozACelon = 0;
-        for(int i = 0; i < allapotTomb.length; i++){
-            for(int j = 0; j < allapotTomb[0].length; j++){
-                if(allapotTomb[i][j] == 5) dobozACelon++;
-            }
-        }
-        int temp = (int) (tavolsagSzamito.atlagTavolsagSzamol(this.allapotTomb)*100);
-        return (20 - (double) temp/100) + dobozACelon*2;
     }
 
     public int[][] getAllapotTomb() {

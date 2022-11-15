@@ -1,5 +1,7 @@
 package allapotter;
 
+import heurisztika.HoltpontDetektalo;
+
 public class AllapotVizsgalo {
 
     private HoltpontDetektalo holtPontDetektalo = new HoltpontDetektalo();
@@ -10,8 +12,7 @@ public class AllapotVizsgalo {
      * 0 : koztes allapot
      */
 
-    //megegyezik az allapot.getAllapot metódussal
-    public int allpotVizsgal(Allapot allapot){
+    public int allapotVizsgal(Allapot allapot){
 
         if(vesztesCel(allapot) || veresegVegallapot(allapot)) {
             return -1;

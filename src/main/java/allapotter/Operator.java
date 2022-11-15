@@ -27,7 +27,7 @@ public class Operator {
         else ujAllapotTomb[jatekosX][jatekosY] = 0;
 
         //ha doboz van a játékos előtt
-        if(jatekosElottEgyel(ujAllapotTomb,jatekosX,jatekosY)==2 || jatekosElottEgyel(ujAllapotTomb,jatekosX,jatekosY)==5){
+        if(jatekosElottEggyel(ujAllapotTomb,jatekosX,jatekosY)==2 || jatekosElottEggyel(ujAllapotTomb,jatekosX,jatekosY)==5){
             //ha a dobozt cél helyre toljuk
             if(jatekosElottKettovel(ujAllapotTomb,jatekosX,jatekosY)==3)
                 lerakJatekosEleKettovel(ujAllapotTomb,jatekosX,jatekosY,5);
@@ -37,7 +37,7 @@ public class Operator {
             mozgatottDobozY = dobozPozicio(jatekosX,jatekosY)[1];
         }
         //ha cél helyre lép a játkos
-        if((jatekosElottEgyel(ujAllapotTomb,jatekosX,jatekosY)==3) || (jatekosElottEgyel(ujAllapotTomb,jatekosX,jatekosY)==5))
+        if((jatekosElottEggyel(ujAllapotTomb,jatekosX,jatekosY)==3) || (jatekosElottEggyel(ujAllapotTomb,jatekosX,jatekosY)==5))
             lerakJatekosEleEgyel(ujAllapotTomb,jatekosX,jatekosY,7);
         else lerakJatekosEleEgyel(ujAllapotTomb,jatekosX,jatekosY,4);
 
@@ -48,26 +48,26 @@ public class Operator {
         int jatekosX = jatekosKeres(allapot.getAllapotTomb(),'x');
         int jatekosY = jatekosKeres(allapot.getAllapotTomb(),'y');
         //ha fal van előtte
-        if (jatekosElottEgyel(allapot.getAllapotTomb(),jatekosX,jatekosY)==1)
+        if (jatekosElottEggyel(allapot.getAllapotTomb(),jatekosX,jatekosY)==1)
             return false;
             //ha doboz + fal van előtte
         else if(
-                ((jatekosElottEgyel(allapot.getAllapotTomb(),jatekosX,jatekosY)==2) && (jatekosElottKettovel(allapot.getAllapotTomb(),jatekosX,jatekosY)==1))
+                ((jatekosElottEggyel(allapot.getAllapotTomb(),jatekosX,jatekosY)==2) && (jatekosElottKettovel(allapot.getAllapotTomb(),jatekosX,jatekosY)==1))
                         //ha doboz + doboz van előtte
-                        || ((jatekosElottEgyel(allapot.getAllapotTomb(),jatekosX,jatekosY)==2) && (jatekosElottKettovel(allapot.getAllapotTomb(),jatekosX,jatekosY)==2))
+                        || ((jatekosElottEggyel(allapot.getAllapotTomb(),jatekosX,jatekosY)==2) && (jatekosElottKettovel(allapot.getAllapotTomb(),jatekosX,jatekosY)==2))
                         //ha doboz a célon + fal van előtte
-                        || ((jatekosElottEgyel(allapot.getAllapotTomb(),jatekosX,jatekosY)==5) && (jatekosElottKettovel(allapot.getAllapotTomb(),jatekosX,jatekosY)==1))
+                        || ((jatekosElottEggyel(allapot.getAllapotTomb(),jatekosX,jatekosY)==5) && (jatekosElottKettovel(allapot.getAllapotTomb(),jatekosX,jatekosY)==1))
                         //ha doboz a célon + doboz a célon van előtte
-                        || ((jatekosElottEgyel(allapot.getAllapotTomb(),jatekosX,jatekosY)==5) && (jatekosElottKettovel(allapot.getAllapotTomb(),jatekosX,jatekosY)==5))
+                        || ((jatekosElottEggyel(allapot.getAllapotTomb(),jatekosX,jatekosY)==5) && (jatekosElottKettovel(allapot.getAllapotTomb(),jatekosX,jatekosY)==5))
                         //ha doboz + doboz a célon van előtte
-                        || ((jatekosElottEgyel(allapot.getAllapotTomb(),jatekosX,jatekosY)==2) && (jatekosElottKettovel(allapot.getAllapotTomb(),jatekosX,jatekosY)==5))
+                        || ((jatekosElottEggyel(allapot.getAllapotTomb(),jatekosX,jatekosY)==2) && (jatekosElottKettovel(allapot.getAllapotTomb(),jatekosX,jatekosY)==5))
                         //ha doboz a célon + doboz van előtte
-                        || ((jatekosElottEgyel(allapot.getAllapotTomb(),jatekosX,jatekosY)==5) && (jatekosElottKettovel(allapot.getAllapotTomb(),jatekosX,jatekosY)==2))
+                        || ((jatekosElottEggyel(allapot.getAllapotTomb(),jatekosX,jatekosY)==5) && (jatekosElottKettovel(allapot.getAllapotTomb(),jatekosX,jatekosY)==2))
         ) return false;
         else return true;
     }
 
-    public int jatekosElottEgyel(int[][] allapotTomb, int pozX, int pozY){
+    public int jatekosElottEggyel(int[][] allapotTomb, int pozX, int pozY){
         switch(this.op){
             case 'f' : return allapotTomb[pozX-1][pozY];
             case 'l' : return allapotTomb[pozX+1][pozY];

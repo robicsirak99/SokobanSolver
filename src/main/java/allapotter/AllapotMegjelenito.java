@@ -1,6 +1,6 @@
 package allapotter;
 
-public class AllapotRajzolo {
+public class AllapotMegjelenito {
 
     public void allapotKirajzol(Allapot allapot){
         for(int i=0; i<allapot.tombMagassag(); i++){

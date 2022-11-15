@@ -1,4 +1,4 @@
-package allapotter;
+package heurisztika;
 
 public class HoltpontDetektalo {
 
@@ -54,94 +54,83 @@ public class HoltpontDetektalo {
         for(int i = 0; i < allapotTombMasolat.length-1; i++){
             for(int j = 0; j < allapotTombMasolat[0].length-1; j++){
                 if((allapotTombMasolat[i][j]==1) && (allapotTombMasolat[i+1][j]==1)){
-                        int k = i;
-                        int l = j;
+                    int k = i;
+                    int l = j;
+                    l++;
+                    while ((allapotTombMasolat[k][l] == 1) && (allapotTombMasolat[k + 1][l] == 0)) {
                         l++;
-                        while ((allapotTombMasolat[k][l] == 1) && (allapotTombMasolat[k + 1][l] == 0)) {
+                    }
+                    if (l != j + 1) {
+                        if ((allapotTombMasolat[k][l] == 1) && (allapotTombMasolat[k + 1][l] == 1)) {
+                            k = i;
+                            l = j;
                             l++;
-                        }
-                        if (l != j + 1) {
-                            if ((allapotTombMasolat[k][l] == 1) && (allapotTombMasolat[k + 1][l] == 1)) {
-                                k = i;
-                                l = j;
+                            while ((allapotTombMasolat[k][l] == 1) && (allapotTombMasolat[k + 1][l] == 0)) {
+                                detektaltHelyek[k + 1][l] = 9;
                                 l++;
-                                while ((allapotTombMasolat[k][l] == 1) && (allapotTombMasolat[k + 1][l] == 0)) {
-                                    detektaltHelyek[k + 1][l] = 9;
-                                    l++;
-                                }
                             }
                         }
+                    }
 
-
-                        //////////////////////////
-
-                        k = i;
-                        l = j;
+                    k = i;
+                    l = j;
+                    l++;
+                    while ((allapotTombMasolat[k][l] == 0) && (allapotTombMasolat[k + 1][l] == 1)) {
                         l++;
-                        while ((allapotTombMasolat[k][l] == 0) && (allapotTombMasolat[k + 1][l] == 1)) {
+                    }
+                    if (l != j + 1) {
+                        if ((allapotTombMasolat[k][l] == 1) && (allapotTombMasolat[k + 1][l] == 1)) {
+                            k = i;
+                            l = j;
                             l++;
-                        }
-                        if (l != j + 1) {
-                            if ((allapotTombMasolat[k][l] == 1) && (allapotTombMasolat[k + 1][l] == 1)) {
-                                k = i;
-                                l = j;
+                            while ((allapotTombMasolat[k][l] == 0) && (allapotTombMasolat[k + 1][l] == 1)) {
+                                detektaltHelyek[k][l] = 9;
                                 l++;
-                                while ((allapotTombMasolat[k][l] == 0) && (allapotTombMasolat[k + 1][l] == 1)) {
-                                    detektaltHelyek[k][l] = 9;
-                                    l++;
-                                }
                             }
                         }
-
+                    }
                 }
 
                 if((allapotTombMasolat[i][j]==1) && (allapotTombMasolat[i][j+1]==1)){
-                        int k = i;
-                        int l = j;
+                    int k = i;
+                    int l = j;
+                    k++;
+                    while ((allapotTombMasolat[k][l] == 1) && (allapotTombMasolat[k][l + 1] == 0)) {
                         k++;
-                        while ((allapotTombMasolat[k][l] == 1) && (allapotTombMasolat[k][l + 1] == 0)) {
+                    }
+                    if (k != i + 1) {
+                        if ((allapotTombMasolat[k][l] == 1) && (allapotTombMasolat[k][l + 1] == 1)) {
+                            k = i;
+                            l = j;
                             k++;
-                        }
-                        if (k != i + 1) {
-                            if ((allapotTombMasolat[k][l] == 1) && (allapotTombMasolat[k][l + 1] == 1)) {
-                                k = i;
-                                l = j;
+                            while ((allapotTombMasolat[k][l] == 1) && (allapotTombMasolat[k][l + 1] == 0)) {
+                                detektaltHelyek[k][l + 1] = 9;
                                 k++;
-                                while ((allapotTombMasolat[k][l] == 1) && (allapotTombMasolat[k][l + 1] == 0)) {
-                                    detektaltHelyek[k][l + 1] = 9;
-                                    k++;
-                                }
                             }
                         }
+                    }
 
-
-                        //////////////////////////
-
-                        k = i;
-                        l = j;
+                    k = i;
+                    l = j;
+                    k++;
+                    while ((allapotTombMasolat[k][l] == 0) && (allapotTombMasolat[k][l + 1] == 1)) {
                         k++;
-                        while ((allapotTombMasolat[k][l] == 0) && (allapotTombMasolat[k][l + 1] == 1)) {
+                    }
+                    if (l != j + 1) {
+                        if ((allapotTombMasolat[k][l] == 1) && (allapotTombMasolat[k][l + 1] == 1)) {
+                            k = i;
+                            l = j;
                             k++;
-                        }
-                        if (l != j + 1) {
-                            if ((allapotTombMasolat[k][l] == 1) && (allapotTombMasolat[k][l + 1] == 1)) {
-                                k = i;
-                                l = j;
+                            while ((allapotTombMasolat[k][l] == 0) && (allapotTombMasolat[k][l + 1] == 1)) {
+                                detektaltHelyek[k][l] = 9;
                                 k++;
-                                while ((allapotTombMasolat[k][l] == 0) && (allapotTombMasolat[k][l + 1] == 1)) {
-                                    detektaltHelyek[k][l] = 9;
-                                    k++;
-                                }
                             }
                         }
-
+                    }
                 }
-
             }
         }
 
-
         return detektaltHelyek;
     }
-
 }

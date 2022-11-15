@@ -1,6 +1,7 @@
 package montecarlo;
 
 import allapotter.*;
+import heurisztika.HeurisztikaSzamito;
 
 import java.util.List;
 import java.util.Random;
@@ -11,7 +12,7 @@ public class MonteCarloFaKereso {
     private Fa fa;
     private boolean benneVizsgalo = false;
 
-    private AllapotRajzolo allapotRajzolo = new AllapotRajzolo();
+    private AllapotMegjelenito allapotMegjelenito = new AllapotMegjelenito();
     private AllapotVizsgalo allapotVizsgalo = new AllapotVizsgalo();
     private HeurisztikaSzamito heurisztikaSzamito = new HeurisztikaSzamito();
 
@@ -36,12 +37,18 @@ public class MonteCarloFaKereso {
         }
 
         boolean c = false;
+        long startTime = System.currentTimeMillis();
+
         for(int k=0; k<1000000; k++) {
             c = algoritmus(gyokerCsomopot);
             if(c) break;
         }
+        long elapsedTime = System.currentTimeMillis() - startTime;
+        long elapsedSeconds = elapsedTime / 1000;
+        long secondsDisplay = elapsedSeconds % 60;
         System.out.println(gyokerCsomopot.getErtek());
         vegigjar(this.fa.getGyoker());
+        System.out.println("Run time: " + elapsedSeconds);
     }
 
     public boolean algoritmus(Csomopont jelenlegiCsomopont){
@@ -49,19 +56,19 @@ public class MonteCarloFaKereso {
         //UCB1 alapján a legjobb csomópontokon végigmegyünk
         while (jelenlegiCsomopont.gyerekTombGet().size()!=0) {
             jelenlegiCsomopont = ucb1.csomopontKeresUCB1Alapjan(jelenlegiCsomopont);
-            if(allapotVizsgalo.allpotVizsgal(jelenlegiCsomopont.getAllapot()) == 1){             //if(jelenlegiCsomopont.getAllapot().nyertesCel()){
+            if(allapotVizsgalo.allapotVizsgal(jelenlegiCsomopont.getAllapot()) == 1){             //if(jelenlegiCsomopont.getAllapot().nyertesCel()){
 
-                allapotRajzolo.allapotKirajzol(jelenlegiCsomopont.getAllapot());
+                allapotMegjelenito.allapotKirajzol(jelenlegiCsomopont.getAllapot());
                 System.out.println("...................WIN....................");
                 return true;
             }
         }
 
-        allapotRajzolo.allapotKirajzol(jelenlegiCsomopont.getAllapot());
+        allapotMegjelenito.allapotKirajzol(jelenlegiCsomopont.getAllapot());
         //if(jelenlegiCsomopont.allapot.vereseg_vegallapot()) System.out.println("----*********-----------VESZTES CEL----------------------//////////////////----");
         //System.out.println(jelenlegiCsomopont.allapot.heurisztika());
         if(jelenlegiCsomopont.getLatogatottsag()==0 && jelenlegiCsomopont.getAllapot() != kezdoAllapot){
-            if(allapotVizsgalo.allpotVizsgal(jelenlegiCsomopont.getAllapot()) == -1){            //if(jelenlegiCsomopont.getAllapot().getVegallapot() == -1){
+            if(allapotVizsgalo.allapotVizsgal(jelenlegiCsomopont.getAllapot()) == -1){            //if(jelenlegiCsomopont.getAllapot().getVegallapot() == -1){
                 visszaTerjeszt(jelenlegiCsomopont,-1);
             }
             /*if(jelenlegiCsomopont.allapot.vereseg_vegallapot()){
@@ -96,7 +103,7 @@ public class MonteCarloFaKereso {
                 System.out.println("CANNOT EXPAND HERE");
                 visszaTerjeszt(jelenlegiCsomopont, -1);
             } else {
-                if(allapotVizsgalo.allpotVizsgal(jelenlegiCsomopont.getAllapot()) == -1){                //if(jelenlegiCsomopont.getAllapot().vesztesCel()) {
+                if(allapotVizsgalo.allapotVizsgal(jelenlegiCsomopont.getAllapot()) == -1){                //if(jelenlegiCsomopont.getAllapot().vesztesCel()) {
                     System.out.println("VESZTES CEL EXPANTION ELOT");
                     visszaTerjeszt(jelenlegiCsomopont, -1);
                 } else {
@@ -160,13 +167,13 @@ public class MonteCarloFaKereso {
         int k = 0;
         while(true){
             k++;
-            if(allapotVizsgalo.allpotVizsgal(allapot) != 0) break; //if(allapot.veresegVegallapot() || allapot.nyertesCel()) break;
+            if(allapotVizsgalo.allapotVizsgal(allapot) != 0) break; //if(allapot.veresegVegallapot() || allapot.nyertesCel()) break;
             random_operator = random.nextInt(4);
             //System.out.println(random_operator);
             if(operatorok.get(random_operator).alkalmazhato(allapot)){
                 allapot = operatorok.get(random_operator).alkalmaz(allapot);
             }
-            if(allapotVizsgalo.allpotVizsgal(allapot) != 0) break; //if(allapot.veresegVegallapot() || allapot.nyertesCel()) break;
+            if(allapotVizsgalo.allapotVizsgal(allapot) != 0) break; //if(allapot.veresegVegallapot() || allapot.nyertesCel()) break;
             if(k == 1000) {
                 System.out.println("NEM TALALT OPERATORT???????????????????????");
                 break;
@@ -174,7 +181,7 @@ public class MonteCarloFaKereso {
         }
         System.out.println("| random lepkedes befejezve");
 
-        return allapot.heurisztika();
+        return heurisztikaSzamito.heurisztika(allapot);
     }
 
     public int gyerekCsomopontValasztlUCB1Alapjan(Csomopont csomopont){
@@ -204,7 +211,7 @@ public class MonteCarloFaKereso {
             if(jelenlegiCsomopont.gyerekTombGet().size()==0) break;
         }
         System.out.println("K: "+k);
-        allapotRajzolo.allapotKirajzol(jelenlegiCsomopont.getAllapot());
+        allapotMegjelenito.allapotKirajzol(jelenlegiCsomopont.getAllapot());
     }
 
 }

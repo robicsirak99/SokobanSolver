@@ -8,16 +8,19 @@ import java.util.List;
 
 public class PalyaBetolto {
 
-    private static final String PALYA_LOKACIO =  "D:/Rendszerezett Fájlok/Egyetem/Szakdolgozathoz/SokobanLevels/";
-
+    private String palyaLokacio;
     private int palyaSzelesseg = 0;
     private int palyaMagassag = 0;
+
+    public PalyaBetolto(String palyaLokacio){
+        this.palyaLokacio = palyaLokacio;
+    }
 
     public Palya palyatBetolt(int szint) {
         String[] stringPalyaTomb = new String[]{};
 
         List<String> beolvasottSorLista;
-        try (BufferedReader reader = new BufferedReader(new FileReader(PALYA_LOKACIO + "lvl" + szint + ".txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(palyaLokacio + "lvl" + szint + ".txt"))) {
             String beolvasottSor;
             beolvasottSorLista = new ArrayList<>();
             while ((beolvasottSor = reader.readLine()) != null) {
@@ -33,7 +36,7 @@ public class PalyaBetolto {
         return new Palya(intPalyaTombKeszit(stringPalyaTomb));
     }
 
-    public int[][] intPalyaTombKeszit(String[] stringPalyaTomb){
+    private int[][] intPalyaTombKeszit(String[] stringPalyaTomb){
         int[][] intPlayaTomb = new int[palyaMagassag][palyaSzelesseg];
         for(int i=0; i<stringPalyaTomb.length; i++){
             for(int j=0; j<stringPalyaTomb[i].length(); j++){
