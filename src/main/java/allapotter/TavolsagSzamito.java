@@ -5,48 +5,48 @@ import java.util.List;
 
 public class TavolsagSzamito {
 
-    public int[][] tomb;
-    public List<int[]> ladak = new ArrayList<int[]>();
-    public List<int[]> celok = new ArrayList<int[]>();
+    private int[][] tomb;
+    private List<int[]> dobozok = new ArrayList<>();
+    private List<int[]> celok = new ArrayList<>();
 
-    public double atlagTavolsagSzamol(int[][] allapot_tomb){
-        this.tomb = allapot_tomb;
-        ladakFeltolt();
+    public double atlagTavolsagSzamol(int[][] allapotTomb){
+        this.tomb = allapotTomb;
+        dobozokFeltolt();
         celokFeltolt();
-        double atlag_tavolsag = 0;
-        for(int i=0; i<ladak.size(); i++){
-            atlag_tavolsag = atlag_tavolsag + Math.abs(ladak.get(i)[0]-celok.get(i)[0]) + Math.abs(ladak.get(i)[1]-celok.get(i)[1]);
+        double atlagTavolsag = 0;
+        for(int i = 0; i< dobozok.size(); i++){
+            atlagTavolsag = atlagTavolsag + Math.abs(dobozok.get(i)[0]-celok.get(i)[0]) + Math.abs(dobozok.get(i)[1]-celok.get(i)[1]);
         }
-        return atlag_tavolsag/ladak.size();
+        return atlagTavolsag/ dobozok.size();
     }
 
-    public void ladakFeltolt(){
+    public void dobozokFeltolt(){
         for(int i=0; i<tomb.length; i++){
             for(int j=0; j<tomb[0].length; j++){
-                if((tomb[i][j] == 2) || (tomb[i][j] == 5)) ladak.add(new int[]{i,j});
+                if((tomb[i][j] == 2) || (tomb[i][j] == 5)) dobozok.add(new int[]{i,j});
             }
         }
     }
 
     public void celokFeltolt(){
-        for (int[] koord : ladak) {
+        for (int[] koord : dobozok) {
             int distance = 99999;
-            int cel_x = -1;
-            int cel_y = -1;
+            int celX = -1;
+            int celY = -1;
             for(int i=0; i<tomb.length; i++){
                 for(int j=0; j<tomb[0].length; j++){
                     if((tomb[i][j]==3) || (tomb[i][j]==5) || (tomb[i][j]==7)){
                         if(!foglalt(celok,new int[]{i,j})){
                             if((Math.abs(koord[0]-i)+Math.abs(koord[1]-j)) < distance){
                                 distance = Math.abs(koord[0]-i)+Math.abs(koord[1]-j);
-                                cel_x = i;
-                                cel_y = j;
+                                celX = i;
+                                celY = j;
                             }
                         }
                     }
                 }
             }
-            celok.add(new int[]{cel_x,cel_y});
+            celok.add(new int[]{ celX, celY });
         }
     }
 

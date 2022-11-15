@@ -6,15 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Csomopont {
-    public Allapot allapot;
-    public Csomopont szulo;
-    public List<Csomopont> gyerekTomb = new ArrayList<Csomopont>();
-    public int latogatottsag;
-    public double ertek;
+
+    private Allapot allapot;
+    private Csomopont szuloCsomopont;
+    private List<Csomopont> gyerekCsomopontTomb = new ArrayList<>();
+
+    private int latogatottsag;
+    private double ertek;
+
     public Csomopont(Allapot allapot, Csomopont szuloCsomopont){
         this.latogatottsag=0;
         this.allapot=allapot;
-        this.szulo=szuloCsomopont;
+        this.szuloCsomopont =szuloCsomopont;
     }
 
     public void setErtek(double ertek) {
@@ -26,19 +29,19 @@ public class Csomopont {
     }
 
     public void gyerekTombAdd(Csomopont csomopont){
-        this.gyerekTomb.add(csomopont);
+        this.gyerekCsomopontTomb.add(csomopont);
     }
 
     public List<Csomopont> gyerekTombGet(){
-        return this.gyerekTomb;
+        return this.gyerekCsomopontTomb;
     }
 
     public Allapot getAllapot() {
         return allapot;
     }
 
-    public Csomopont getSzulo() {
-        return szulo;
+    public Csomopont getSzuloCsomopont() {
+        return szuloCsomopont;
     }
 
     public void setLatogatottsag(int latogatottsag) {

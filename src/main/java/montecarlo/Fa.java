@@ -1,7 +1,5 @@
 package montecarlo;
 
-import montecarlo.Csomopont;
-
 public class Fa {
     Csomopont gyoker;
 

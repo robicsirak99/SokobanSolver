@@ -8,29 +8,29 @@ import java.util.List;
 
 public class PalyaBetolto {
 
-    public static String PALYA_LOKACIO =  "D:/Rendszerezett Fájlok/Egyetem/Szakdolgozathoz/SokobanLevels/";
+    private static final String PALYA_LOKACIO =  "D:/Rendszerezett Fájlok/Egyetem/Szakdolgozathoz/SokobanLevels/";
 
-    public int palyaSzelesseg = 0;
-    public int palyaMagassag = 0;
+    private int palyaSzelesseg = 0;
+    private int palyaMagassag = 0;
 
     public Palya palyatBetolt(int szint) {
         String[] stringPalyaTomb = new String[]{};
 
-        try {
-            BufferedReader in = new BufferedReader(new FileReader(PALYA_LOKACIO + "lvl"+szint+".txt"));
+        List<String> beolvasottSorLista;
+        try (BufferedReader reader = new BufferedReader(new FileReader(PALYA_LOKACIO + "lvl" + szint + ".txt"))) {
             String beolvasottSor;
-            List<String> beolvasottSorLista = new ArrayList<>();
-            while((beolvasottSor = in.readLine()) != null){
-                if(palyaSzelesseg < beolvasottSor.length()) palyaSzelesseg = beolvasottSor.length();
+            beolvasottSorLista = new ArrayList<>();
+            while ((beolvasottSor = reader.readLine()) != null) {
+                if (palyaSzelesseg < beolvasottSor.length()) palyaSzelesseg = beolvasottSor.length();
                 beolvasottSorLista.add(beolvasottSor);
                 palyaMagassag++;
             }
             stringPalyaTomb = beolvasottSorLista.toArray(new String[0]);
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return new Palya(palyaSzelesseg, palyaMagassag, intPalyaTombKeszit(stringPalyaTomb));
+        return new Palya(intPalyaTombKeszit(stringPalyaTomb));
     }
 
     public int[][] intPalyaTombKeszit(String[] stringPalyaTomb){
@@ -43,6 +43,8 @@ public class PalyaBetolto {
                     case '$' :{ intPlayaTomb[i][j]=2; break; }
                     case '.' :{ intPlayaTomb[i][j]=3; break; }
                     case '@' :{ intPlayaTomb[i][j]=4; break; }
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + stringPalyaTomb[i].charAt(j));
                 }
             }
         }
