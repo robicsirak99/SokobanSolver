@@ -15,9 +15,9 @@ public class Csomopont {
     private double ertek;
 
     public Csomopont(Allapot allapot, Csomopont szuloCsomopont){
-        this.latogatottsag=0;
-        this.allapot=allapot;
-        this.szuloCsomopont =szuloCsomopont;
+        this.latogatottsag = 0;
+        this.allapot = allapot;
+        this.szuloCsomopont = szuloCsomopont;
     }
 
     public void setErtek(double ertek) {

@@ -160,7 +160,6 @@ public class MonteCarloFaKereso {
         int k = 0;
         while (true) {
             k++;
-
             if (vegallapot(allapot)) break;
             randomOperator = random.nextInt(4);
             if (operatorok.get(randomOperator).alkalmazhato(allapot)) {

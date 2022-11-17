@@ -38,13 +38,14 @@ public class Operator {
         }
         //ha cél helyre lép a játkos
         if((jatekosElottEggyel(ujAllapotTomb,jatekosX,jatekosY)==3) || (jatekosElottEggyel(ujAllapotTomb,jatekosX,jatekosY)==5))
-            lerakJatekosEleEgyel(ujAllapotTomb,jatekosX,jatekosY,7);
-        else lerakJatekosEleEgyel(ujAllapotTomb,jatekosX,jatekosY,4);
+            lerakJatekosEleEggyel(ujAllapotTomb,jatekosX,jatekosY,7);
+        else lerakJatekosEleEggyel(ujAllapotTomb,jatekosX,jatekosY,4);
 
         return new Allapot(ujAllapotTomb, mozgatottDobozX, mozgatottDobozY);
     }
 
     public boolean alkalmazhato(Allapot allapot){
+
         int jatekosX = jatekosKeres(allapot.getAllapotTomb(),'x');
         int jatekosY = jatekosKeres(allapot.getAllapotTomb(),'y');
         //ha fal van előtte
@@ -76,12 +77,12 @@ public class Operator {
             default : return -1;
         }
     }
-    public void lerakJatekosEleEgyel(int[][] allapotTomb, int pozX, int pozY, int ertek){
+    public void lerakJatekosEleEggyel(int[][] allapotTomb, int pozX, int pozY, int ertek){
         switch(this.op){
-            case 'f' : {allapotTomb[pozX-1][pozY] = ertek;break;}
-            case 'l' : {allapotTomb[pozX+1][pozY] = ertek;break;}
-            case 'j' : {allapotTomb[pozX][pozY+1] = ertek;break;}
-            case 'b' : {allapotTomb[pozX][pozY-1] = ertek;break;}
+            case 'f' : { allapotTomb[pozX-1][pozY] = ertek; break; }
+            case 'l' : { allapotTomb[pozX+1][pozY] = ertek; break; }
+            case 'j' : { allapotTomb[pozX][pozY+1] = ertek; break; }
+            case 'b' : { allapotTomb[pozX][pozY-1] = ertek; break; }
             default:
                 throw new IllegalStateException("Unexpected value: " + this.op);
         }
