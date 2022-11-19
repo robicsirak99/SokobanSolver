@@ -18,7 +18,6 @@ public class MonteCarloFaKereso {
     }
 
     public void algoritmusElindit(Allapot kezdoAllapot){
-
         Csomopont gyokerCsomopot = new Csomopont(kezdoAllapot,null);
         Fa fa = new Fa(gyokerCsomopot);
 
@@ -30,24 +29,23 @@ public class MonteCarloFaKereso {
             }
         }
 
-        boolean c = false;
-        long startTime = System.currentTimeMillis();
+        var gyozelem = false;
+        var startTime = System.currentTimeMillis();
+        long elapsedTimeInSeconds = 0;
 
-        for(int k=0; k<1000000; k++) {
-            c = algoritmus(fa, gyokerCsomopot);
-            if(c) break;
+        while(!gyozelem){
+            gyozelem = algoritmusIteracio(fa);
+            elapsedTimeInSeconds = (System.currentTimeMillis() - startTime) / 1000;
+            if(elapsedTimeInSeconds > 10000) break;
         }
 
-        long elapsedTime = System.currentTimeMillis() - startTime;
-        long elapsedSeconds = elapsedTime / 1000;
-
-        System.out.println("Run time: " + elapsedSeconds);
+        System.out.println("Run time: " + elapsedTimeInSeconds);
     }
 
-    private boolean algoritmus(Fa fa, Csomopont jelenlegiCsomopont){
+    private boolean algoritmusIteracio(Fa fa){
+        var jelenlegiCsomopont = fa.getGyoker();
         var kezdoAllapot = jelenlegiCsomopont.getAllapot();
 
-        //UCB1 alapján a legjobb csomópontokon végigmegyünk
         while (!jelenlegiCsomopont.gyerekTombGet().isEmpty()) {
             jelenlegiCsomopont = UCB1.csomopontValasztUCB1Alapjan(jelenlegiCsomopont);
             if(gyozelemAllapot(jelenlegiCsomopont.getAllapot())){
@@ -56,51 +54,46 @@ public class MonteCarloFaKereso {
                 return true;
             }
         }
-
         allapotMegjelenito.allapotKirajzol(jelenlegiCsomopont.getAllapot());
 
-        if(jelenlegiCsomopont.getLatogatottsag()==0 && jelenlegiCsomopont.getAllapot() != kezdoAllapot){
+        if(jelenlegiCsomopont.getLatogatottsag()==0){
             if(veresegAllapot(jelenlegiCsomopont.getAllapot())){
                 visszaTerjeszt(jelenlegiCsomopont,-1);
             }
             else {
-                System.out.println("RANDOM SZIMULACIO + VISSZATERJESZTES");
                 double randomSzimulacioErteke = randomSzimulacio(jelenlegiCsomopont.getAllapot());
-                System.out.println("RANDOM SZIMULACIO ERTEKE: " + randomSzimulacioErteke);
                 visszaTerjeszt(jelenlegiCsomopont, randomSzimulacioErteke);
             }
         } else {
-            System.out.println("BOVITES");
-            Csomopont ujCsomopont;
-            Allapot ujAllapot;
-            for(int i=0; i<4; i++){
-                if(operatorok.get(i).alkalmazhato(jelenlegiCsomopont.getAllapot())){
-                    ujAllapot = operatorok.get(i).alkalmaz(jelenlegiCsomopont.getAllapot());
+            kibovit(fa, jelenlegiCsomopont);
+        }
+        return false;
+    }
 
-                    if(!allapotMarLetezikAFaban(fa.getGyoker(), ujAllapot)){
-                        ujCsomopont = new Csomopont(ujAllapot,jelenlegiCsomopont);
-                        jelenlegiCsomopont.gyerekTombAdd(ujCsomopont);
-                    }
-                }
-            }
-            if(jelenlegiCsomopont.gyerekTombGet().isEmpty()){
-                System.out.println("BOVITES NEM LEHETSEGES");
-                visszaTerjeszt(jelenlegiCsomopont, -1);
-            } else {
-                if(veresegAllapot(jelenlegiCsomopont.getAllapot())){
-                    System.out.println("VESZTES CEL BOVITES ELOTT");
-                    visszaTerjeszt(jelenlegiCsomopont, -1);
-                } else {
-                    System.out.println("KIBOVITES MEGKEZDVE");
-                    jelenlegiCsomopont = jelenlegiCsomopont.gyerekTombGet().get(0);
-                    double randomSzimulacioErteke = randomSzimulacio(jelenlegiCsomopont.getAllapot());
-                    System.out.println("RANDOM SZIMULACIOS ERTEK MEKAPVA");
-                    visszaTerjeszt(jelenlegiCsomopont, randomSzimulacioErteke);
-                    System.out.println("KIBOVITES BEFEJEZVE");
+    private void kibovit(Fa fa, Csomopont csomopont){
+        Csomopont ujCsomopont;
+        Allapot ujAllapot;
+        for(int i=0; i<4; i++){
+            if(operatorok.get(i).alkalmazhato(csomopont.getAllapot())){
+                ujAllapot = operatorok.get(i).alkalmaz(csomopont.getAllapot());
+
+                if(!allapotMarLetezikAFaban(fa.getGyoker(), ujAllapot)){
+                    ujCsomopont = new Csomopont(ujAllapot,csomopont);
+                    csomopont.gyerekTombAdd(ujCsomopont);
                 }
             }
         }
-        return false;
+        if(csomopont.gyerekTombGet().isEmpty()){
+            visszaTerjeszt(csomopont, -1);
+        } else {
+            if(veresegAllapot(csomopont.getAllapot())){
+                visszaTerjeszt(csomopont, -1);
+            } else {
+                csomopont = csomopont.gyerekTombGet().get(0);
+                double randomSzimulacioErteke = randomSzimulacio(csomopont.getAllapot());
+                visszaTerjeszt(csomopont, randomSzimulacioErteke);
+            }
+        }
     }
 
     private boolean gyozelemAllapot(Allapot allapot){
