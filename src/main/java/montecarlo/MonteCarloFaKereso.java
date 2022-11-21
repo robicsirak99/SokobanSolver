@@ -31,16 +31,16 @@ public class MonteCarloFaKereso {
         }
 
         var gyozelem = false;
-        var startTime = System.currentTimeMillis();
-        long elapsedTimeInSeconds = 0;
+        var inditasiIdo = System.currentTimeMillis();
+        long elteltMasodpercek = 0;
 
         while(!gyozelem){
             gyozelem = algoritmusIteracio(fa);
-            elapsedTimeInSeconds = (System.currentTimeMillis() - startTime) / 1000;
-            if(elapsedTimeInSeconds > 10000) break;
+            elteltMasodpercek = (System.currentTimeMillis() - inditasiIdo) / 1000;
+            if(elteltMasodpercek > 10000) break;
         }
 
-        System.out.println("Run time: " + elapsedTimeInSeconds);
+        System.out.println("FUTASI IDO (MASODPERC): " + elteltMasodpercek);
     }
 
     private boolean algoritmusIteracio(Fa fa){

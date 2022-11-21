@@ -10,9 +10,8 @@ import java.util.List;
 public class Main{
 
     private static final int SZINT = 1;
-    private static final String PALYA_LOKACIO = "D:/Rendszerezett Fájlok/Egyetem/Szakdolgozathoz/SokobanLevels/";
     private static List<Operator> operatorok = new ArrayList<>(){};
-    private static PalyaBetolto palyaBetolto = new PalyaBetolto(PALYA_LOKACIO);
+    private static PalyaBetolto palyaBetolto = new PalyaBetolto();
 
     public static void main(String[] args) {
         Palya palya = palyaBetolto.palyatBetolt(SZINT);

@@ -1,26 +1,26 @@
 package palya;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PalyaBetolto {
 
-    private String palyaLokacio;
     private int palyaSzelesseg = 0;
     private int palyaMagassag = 0;
-
-    public PalyaBetolto(String palyaLokacio){
-        this.palyaLokacio = palyaLokacio;
-    }
 
     public Palya palyatBetolt(int szint) {
         String[] stringPalyaTomb = new String[]{};
 
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream("SokobanLevels/lvl" + szint + ".txt");
         List<String> beolvasottSorLista;
-        try (BufferedReader reader = new BufferedReader(new FileReader(palyaLokacio + "lvl" + szint + ".txt"))) {
+
+        try (
+            InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+            BufferedReader reader = new BufferedReader(streamReader)) {
+
             String beolvasottSor;
             beolvasottSorLista = new ArrayList<>();
             while ((beolvasottSor = reader.readLine()) != null) {
