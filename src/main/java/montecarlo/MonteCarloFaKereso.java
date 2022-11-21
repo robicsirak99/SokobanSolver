@@ -12,6 +12,7 @@ public class MonteCarloFaKereso {
     private final AllapotMegjelenito allapotMegjelenito = new AllapotMegjelenito();
     private final AllapotVizsgalo allapotVizsgalo = new AllapotVizsgalo();
     private final HeurisztikaSzamito heurisztikaSzamito = new HeurisztikaSzamito();
+    private final Random random = new Random();
 
     public MonteCarloFaKereso(List<Operator> operatorok){
         this.operatorok = operatorok;
@@ -44,19 +45,16 @@ public class MonteCarloFaKereso {
 
     private boolean algoritmusIteracio(Fa fa){
         var jelenlegiCsomopont = fa.getGyoker();
-        var kezdoAllapot = jelenlegiCsomopont.getAllapot();
 
         while (!jelenlegiCsomopont.gyerekTombGet().isEmpty()) {
             jelenlegiCsomopont = UCB1.csomopontValasztUCB1Alapjan(jelenlegiCsomopont);
             if(gyozelemAllapot(jelenlegiCsomopont.getAllapot())){
-                allapotMegjelenito.allapotKirajzol(jelenlegiCsomopont.getAllapot());
                 eredmenytMegjelenit(jelenlegiCsomopont);
                 return true;
             }
         }
         allapotMegjelenito.allapotKirajzol(jelenlegiCsomopont.getAllapot());
-
-        if(jelenlegiCsomopont.getLatogatottsag()==0){
+        if(jelenlegiCsomopont.getLatogatottsag() == 0){
             if(veresegAllapot(jelenlegiCsomopont.getAllapot())){
                 visszaTerjeszt(jelenlegiCsomopont,-1);
             }
@@ -73,10 +71,9 @@ public class MonteCarloFaKereso {
     private void kibovit(Fa fa, Csomopont csomopont){
         Csomopont ujCsomopont;
         Allapot ujAllapot;
-        for(int i=0; i<4; i++){
+        for(var i = 0; i < 4; i++){
             if(operatorok.get(i).alkalmazhato(csomopont.getAllapot())){
                 ujAllapot = operatorok.get(i).alkalmaz(csomopont.getAllapot());
-
                 if(!allapotMarLetezikAFaban(fa.getGyoker(), ujAllapot)){
                     ujCsomopont = new Csomopont(ujAllapot,csomopont);
                     csomopont.gyerekTombAdd(ujCsomopont);
@@ -124,13 +121,12 @@ public class MonteCarloFaKereso {
     }
 
     private boolean allapotMegegyezik(Allapot allapot1, Allapot allapot2){
-        boolean c = true;
         for(int i = 0; i<allapot1.tombMagassag(); i++){
             for(int j = 0; j<allapot1.tombSzelesseg(); j++){
-                if(allapot1.getAllapotTomb()[i][j]!=allapot2.getAllapotTomb()[i][j]) c=false;
+                if(allapot1.getAllapotTomb()[i][j] != allapot2.getAllapotTomb()[i][j]) return false;
             }
         }
-        return c;
+        return true;
     }
 
     private void visszaTerjeszt(Csomopont csomopont, double ertek){
@@ -146,30 +142,21 @@ public class MonteCarloFaKereso {
     }
 
     private double randomSzimulacio(Allapot allapot){
-        System.out.println("RANDOM SZIMULACIO MEGKEZDVE");
-        Random random = new Random();
-        int randomOperator;
+        var randomOperator = 0;
+        if (vegallapot(allapot)) return heurisztikaSzamito.heurisztika(allapot);
 
-        int k = 0;
-        while (true) {
-            k++;
-            if (vegallapot(allapot)) break;
+        for(var i = 0; i < 10000; i++){
             randomOperator = random.nextInt(4);
             if (operatorok.get(randomOperator).alkalmazhato(allapot)) {
                 allapot = operatorok.get(randomOperator).alkalmaz(allapot);
             }
             if (vegallapot(allapot)) break;
-            if (k == 100) {
-                System.out.println("NEM TALALT OPERATORT");
-                break;
-            }
         }
-        System.out.println("RANDOM SZIMULACIO BEFEJEZVE");
-
         return heurisztikaSzamito.heurisztika(allapot);
     }
 
     private void eredmenytMegjelenit(Csomopont csomopont){
+        allapotMegjelenito.allapotKirajzol(csomopont.getAllapot());
         var faMelyseg = 0;
         do {
             System.out.print("LATOGATOTTSAG: " + csomopont.getLatogatottsag());

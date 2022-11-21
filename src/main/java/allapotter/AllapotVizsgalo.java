@@ -40,7 +40,6 @@ public class AllapotVizsgalo {
         for(int i = 0; i < holtpontok.length; i++) {
             for(int j = 0; j < holtpontok[0].length; j++) {
                 if((holtpontok[i][j] == 9) && (allapotTomb[i][j] == 2)) {
-                    System.out.println("HOLTPONT");
                     return true;
                 }
             }
